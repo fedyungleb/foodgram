@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from foodgram.settings import EMPTY
+
 from recipes.models import (Ingredient, IngredientsRecipe, Recipe, Tag,
                             TagsRecipe)
 
@@ -16,25 +18,28 @@ class TagsInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(CustomUser)
 class UsersAdmin(admin.ModelAdmin):
     list_display = ('username', 'password', 'first_name', 'last_name', 'email')
     list_filter = ('username', 'email')
     search_fields = ('username', 'email')
-    empty_value_display = "-пусто-"
+    empty_value_display = EMPTY
 
 
+@admin.register(Follow)
 class FollowsAdmin(admin.ModelAdmin):
     list_display = ('user', 'author')
     list_filter = ('user', 'author')
     search_fields = ('user', 'author')
-    empty_value_display = "-пусто-"
+    empty_value_display = EMPTY
 
 
+@admin.register(Recipe)
 class RecipesAdmin(admin.ModelAdmin):
     list_display = ('name', 'author', 'count_recipes_favorite')
     list_filter = ('name', 'author', 'tags')
     search_fields = ('name', 'author', 'tags')
-    empty_value_display = "-пусто-"
+    empty_value_display = EMPTY
     inlines = [
         TagsInline, IngredientsInline
     ]
@@ -46,6 +51,7 @@ class RecipesAdmin(admin.ModelAdmin):
     count_recipes_favorite.short_description = 'Популярность'
 
 
+@admin.register(Tag)
 class TagsAdmin(admin.ModelAdmin):
     inlines = [
         TagsInline
@@ -55,6 +61,7 @@ class TagsAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(Ingredient)
 class IngredientsAdmin(admin.ModelAdmin):
     inlines = [
         IngredientsInline
@@ -63,9 +70,3 @@ class IngredientsAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     search_fields = ('name',)
 
-
-admin.site.register(CustomUser, UsersAdmin)
-admin.site.register(Follow, FollowsAdmin)
-admin.site.register(Recipe, RecipesAdmin)
-admin.site.register(Tag, TagsAdmin)
-admin.site.register(Ingredient, IngredientsAdmin)
