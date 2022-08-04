@@ -5,9 +5,9 @@ from recipes.views import IngredientsViewSet, RecipeViewSet, TagsViewSet
 
 
 router_v1 = DefaultRouter()
-router_v1.register(r'recipes', RecipeViewSet, basename='recipes')
-router_v1.register(r'ingredients', IngredientsViewSet, basename='ingredients')
-router_v1.register(r'tags', TagsViewSet, basename='tags')
+router_v1.register('recipes', RecipeViewSet, basename='recipes')
+router_v1.register('ingredients', IngredientsViewSet, basename='ingredients')
+router_v1.register('tags', TagsViewSet, basename='tags')
 
 
 urlpatterns = [
