@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     )
     role = models.CharField(
         choices=USERS_ROLE,
-        max_length=10,
+        max_length=200,
         verbose_name='Роль пользователя',
         default=ROLE_USER
     )
@@ -46,7 +46,9 @@ class Follow(models.Model):
     )
 
     class Meta:
-        constraints = [models.UniqueConstraint(
-            fields=['author', 'user'],
-            name='unique_object'
-        )]
+        constraints = (
+            models.UniqueConstraint(
+                fields=('author', 'user',),
+                name='unique_object'
+            ),
+        )

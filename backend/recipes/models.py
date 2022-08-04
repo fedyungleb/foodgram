@@ -25,12 +25,12 @@ class Tag(models.Model):
         ordering = ('slug',)
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=['slug'],
+                fields=('slug',),
                 name='unique_slug'
-            )
-        ]
+            ),
+        )
 
     def __str__(self):
         return self.name
@@ -55,7 +55,6 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-
     name = models.CharField(
         max_length=200,
         verbose_name='recipe title')
@@ -131,12 +130,12 @@ class IngredientsRecipe(models.Model):
     class Meta:
         verbose_name = 'Ingredient in recipe'
         verbose_name_plural = 'Ingredients in recipe'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=('recipe', 'ingredient'),
+                fields=('recipe', 'ingredient',),
                 name='unique_recipe'
-            )
-        ]
+            ),
+        )
 
 
 class TagsRecipe(models.Model):
@@ -168,12 +167,12 @@ class FavoriteRecipe(models.Model):
     )
 
     class Meta:
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=('recipe', 'user'),
                 name='unique_favorite'
-            )
-        ]
+            ),
+        )
 
 
 class ShoppingCart(models.Model):
@@ -192,9 +191,9 @@ class ShoppingCart(models.Model):
 
     class Meta:
         verbose_name = 'Shopping cart'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=('recipe', 'user'),
                 name='unique_recipe_cart'
-            )
-        ]
+            ),
+        )
