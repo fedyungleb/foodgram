@@ -8,9 +8,12 @@ environ.Env.read_env()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '0.0.0.0', '127.0.0.1', 'localhost', 'web', '158.160.8.78',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,7 +28,6 @@ INSTALLED_APPS = [
     'djoser',
     'recipes',
     'users',
-    'colorfield',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_ENGINE'),
@@ -69,6 +70,19 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'backend_media')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+
+DEFAULT_FROM_EMAIL = 'admin@yamdb.com'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -94,16 +108,16 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6,
     'SEARCH_PARAM': 'name',
 }
-LOGIN_REDIRECT_URL = '/'
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_REDIRECT_URL = '/'
 
 DJOSER = {
     'HIDE_USERS': False,
@@ -117,14 +131,6 @@ DJOSER = {
     },
 }
 
-AUTH_USER_MODEL = 'users.CustomUser'
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-
-DEFAULT_FROM_EMAIL = 'admin@yamdb.com'
-
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
@@ -135,10 +141,4 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'backend_media')
-
-EMPTY = '-пусто-'
+EMPTY = '-пусто'
