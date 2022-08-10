@@ -7,30 +7,16 @@ from users.models import CustomUser
 
 
 class Tag(models.Model):
-    name = models.CharField(
-        max_length=10,
-        unique=True
-    )
-    color = ColorField(
-        max_length=7,
-        verbose_name='Цвет тега',
-        unique=True
-        )
-    slug = models.SlugField(
-        max_length=10,
-        unique=True
-    )
+    name = models.CharField(max_length=200, unique=True,
+                            verbose_name='Название')
+    color = ColorField(unique=True, verbose_name='Цвет в HEX')
+    slug = models.SlugField(max_length=200, unique=True,
+                            verbose_name='Уникальный слаг',
+                            )
 
     class Meta:
-        ordering = ('slug',)
-        verbose_name = 'Tag'
-        verbose_name_plural = 'Tags'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['slug'],
-                name='unique_slug'
-            )
-        ]
+        verbose_name = 'тег'
+        verbose_name_plural = 'теги'
 
     def __str__(self):
         return self.name

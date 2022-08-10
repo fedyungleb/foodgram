@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from foodgram.settings import EMPTY
 
@@ -52,13 +53,17 @@ class RecipesAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagsAdmin(admin.ModelAdmin):
-    inlines = [
-        TagsInline
-    ]
-    list_display = ('name', 'color')
+class TagAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+    list_display = ('id', 'name', 'slug', 'color', 'preview')
     list_filter = ('name',)
     search_fields = ('name',)
+
+    def preview(self, obj):
+        return format_html(
+            f'<span style="color:{obj.color}; '
+            f'width=20px; height=20px;">{obj.name}</span>'
+        )
 
 
 @admin.register(Ingredient)
@@ -69,4 +74,3 @@ class IngredientsAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     list_filter = ('name',)
     search_fields = ('name',)
-

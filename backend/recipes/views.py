@@ -22,6 +22,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_class = RecipeFilter
     serializer_class = RecipeSerializer
     permission_classes = [AuthorOrReadOnly]
+    throttle_scope = 'low_request'
 
     @action(
         detail=True,
