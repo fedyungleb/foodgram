@@ -1,22 +1,39 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 
-from colorfield.fields import ColorField
 
 from users.models import CustomUser
 
 
 class Tag(models.Model):
+    Black = '#000000'
+    White = '#ffffff'
+    COLOR_HEX = (
+        (Black, 'Чёрный'),
+        (White, 'Белый'),
+        )
     name = models.CharField(max_length=200, unique=True,
                             verbose_name='Название')
-    color = ColorField(unique=True, verbose_name='Цвет в HEX')
+    color = models.CharField(
+        choices=COLOR_HEX,
+        max_length=7,
+        verbose_name='Цвет тега',
+        unique=True
+    )
     slug = models.SlugField(max_length=200, unique=True,
                             verbose_name='Уникальный слаг',
                             )
 
     class Meta:
-        verbose_name = 'тег'
-        verbose_name_plural = 'теги'
+        ordering = ('slug',)
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['slug'],
+                name='unique_slug'
+            )
+        ]
 
     def __str__(self):
         return self.name
