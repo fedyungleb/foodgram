@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'djoser',
     'recipes',
     'users',
+    'colorfield',
 ]
 
 MIDDLEWARE = [

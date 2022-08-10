@@ -1,9 +1,9 @@
 import traceback
 
-from django.db import IntegrityError
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
+from django.db import IntegrityError
 from users.models import CustomUser
 
 from .models import (FavoriteRecipe, Ingredient, IngredientsRecipe, Recipe,
@@ -99,6 +99,19 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_in_shopping_cart(self, data):
         return self.get_status_func(data)
 
+    def validate(self, data):
+        context = self.context['request']
+        ingredients_set = context.data['ingredients']
+        uniq = []
+        for ingredient in ingredients_set:
+            ingredient_model = Ingredient.objects.get(id=ingredient['id'])
+            if ingredient_model in uniq:
+                raise serializers.ValidationError(
+                    f'Вы уже добавили {ingredient_model} в рецепт')
+            else:
+                uniq.append(ingredient_model)
+        return data
+
     def create(self, validated_data):
         context = self.context['request']
         ingredients = validated_data.pop('recipe_ingredients')
@@ -140,13 +153,19 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.set(tags_set)
         IngredientsRecipe.objects.filter(recipe=instance).delete()
         ingredients_req = context.data['ingredients']
+        uniq = []
         for ingredient in ingredients_req:
             ingredient_model = Ingredient.objects.get(id=ingredient['id'])
-            IngredientsRecipe.objects.create(
-                recipe=recipe,
-                ingredient=ingredient_model,
-                amount=ingredient['amount'],
-            )
+            if ingredient_model in uniq:
+                raise serializers.ValidationError(
+                    f'Вы уже добавили {ingredient_model} в рецепт')
+            else:
+                uniq.append(ingredient_model)
+                IngredientsRecipe.objects.create(
+                    recipe=recipe,
+                    ingredient=ingredient_model,
+                    amount=ingredient['amount'],
+                )
         return instance
 
     def to_representation(self, instance):

@@ -4,7 +4,11 @@ WORKDIR /code
 
 COPY requirements.txt .
 
+RUN python3 -m pip install pip==22.2.2
 RUN pip install -r requirements.txt
+RUN pip install django-colorfield
+
+
 
 COPY . .
 
