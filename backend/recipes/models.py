@@ -52,7 +52,7 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=200, verbose_name='recipe title')
+    name = models.CharField(unique=True, max_length=200, verbose_name='recipe title')
     image = models.ImageField(
         upload_to='recipes/',
         verbose_name='recipe image',
