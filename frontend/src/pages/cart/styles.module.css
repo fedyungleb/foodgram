@@ -5,3 +5,16 @@
 .container {
   margin-bottom: 70px;
 }
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+@media screen and (max-width: 940px) {
+  .buttonGroup {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

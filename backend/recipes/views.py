@@ -14,6 +14,7 @@ from .serializers import (FavoritedSerializer, IngredientSerializer,
                           RecipeSerializer, ShoppingCartSerializer,
                           TagSerializer)
 from .utils import get_shopping_list
+from .external_api import ExternalGroceryService
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -91,6 +92,42 @@ class RecipeViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(
+        detail=False,
+        methods=['POST'],
+        url_path='checkout',
+        permission_classes=[IsAuthenticated]
+    )
+    def checkout(self, request):
+        shopping_cart_items = ShoppingCart.objects.filter(user=request.user)
+        if not shopping_cart_items.exists():
+            return Response({"error": "Shopping cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
+
+        ingredients = {}
+        for item in shopping_cart_items:
+            recipe_ingredients = item.recipe.recipe_ingredients.all()
+            for ingredient in recipe_ingredients:
+                name = ingredient.ingredient.name
+                unit = ingredient.ingredient.measurement_unit
+                amount = ingredient.amount
+                if name in ingredients:
+                    ingredients[name]['quantity'] += amount
+                else:
+                    ingredients[name] = {
+                        'name': name,
+                        'quantity': amount,
+                        'unit': unit,
+                    }
+
+        items = list(ingredients.values())
+
+        grocery_service = ExternalGroceryService()
+        response = grocery_service.create_shopping_list(items)
+
+        if "error" in response:
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(response, status=status.HTTP_200_OK)
+
 
 class IngredientsViewSet(viewsets.ModelViewSet):
     pagination_class = None
@@ -106,4 +143,3 @@ class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-

@@ -9,19 +9,18 @@ class Tag(models.Model):
     Black = '#000000'
     White = '#ffffff'
     COLOR_HEX = (
-        (Black, 'Чёрный'),
-        (White, 'Белый'),
+        (Black, 'Black'),
+        (White, 'White'),
         )
     name = models.CharField(max_length=200, unique=True,
-                            verbose_name='Название')
+                            verbose_name='Tag name')
     color = models.CharField(
         choices=COLOR_HEX,
         max_length=7,
-        verbose_name='Цвет тега',
-        unique=True
+        verbose_name='Tags color'
     )
     slug = models.SlugField(max_length=200, unique=True,
-                            verbose_name='Уникальный слаг',
+                            verbose_name='Unique slag',
                             )
 
     class Meta:
@@ -56,34 +55,34 @@ class Recipe(models.Model):
     image = models.ImageField(
         upload_to='recipes/',
         verbose_name='recipe image',
-        help_text='Картинка рецепта',
+        help_text='Recipe image',
     )
     author = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name='recipes',
-        verbose_name='recipe author', help_text='Автор рецепта',
+        verbose_name='recipe author', help_text='Recipe author',
     )
     text = models.TextField(
-        help_text='Текстовое описание рецепта', verbose_name='recipe text',
+        help_text='Description of the recipe', verbose_name='recipe text',
     )
     ingredients = models.ManyToManyField(
         Ingredient, through='IngredientsRecipe',
         related_name='recipes',
         verbose_name='list of ingredients',
-        help_text='Список ингредиентов',
+        help_text='list of ingredients',
     )
     tags = models.ManyToManyField(
         Tag, through='TagsRecipe',
         related_name='recipes',
-        help_text='Выберите тэг',
+        help_text='Choose the tag',
     )
     cooking_time = models.PositiveSmallIntegerField(
-        help_text='Время приготовления, мин',
+        help_text='Cooking time, min',
         validators=[MinValueValidator(
-            1, 'Время приготовления не может быть меньше 1 мин'
+            1, 'Cooking time could not be less than min'
         )],
     )
     pub_date = models.DateTimeField(
-        'Дата публикации', auto_now_add=True, db_index=True
+        'Created at', auto_now_add=True, db_index=True
     )
 
     class Meta:
@@ -105,7 +104,7 @@ class IngredientsRecipe(models.Model):
     amount = models.PositiveSmallIntegerField(
         default=1,
         validators=[MinValueValidator(1)],
-        help_text='Количество ингредиента',
+        help_text='Number of ingredients',
     )
 
     class Meta:
