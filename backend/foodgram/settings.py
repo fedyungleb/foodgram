@@ -71,6 +71,21 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 
@@ -83,6 +98,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 DEFAULT_FROM_EMAIL = 'admin@yamdb.com'
+EXTERNAL_API_URL = 'http://grocery:8080/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -132,7 +148,7 @@ DJOSER = {
     },
 }
 
-LANGUAGE_CODE = 'ru'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'UTC'
 

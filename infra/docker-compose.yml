@@ -10,18 +10,20 @@ services:
     build: ../frontend
     volumes:
       - ../frontend/:/app/result_build/
-  
+    env_file:
+      - ./.env
+
   postgres:
     image: postgres:12.4
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./.env
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
 
@@ -32,10 +34,9 @@ services:
       - static_value:/code/backend_static/
       - media_value:/code/backend_media/
       - ../backend:/code
+      - ../infra/.env:/code/foodgram/.env
     depends_on:
       - postgres
-    env_file:
-      - ./.env
 
   nginx:
     image: nginx:1.19.3
@@ -50,4 +51,12 @@ services:
       - media_value:/var/html/media/
     depends_on:
       - frontend
+      - web
+
+  grocery:
+    container_name: grocery
+    build: ../external_grocery_service
+    ports:
+      - "8080:8080"
+    depends_on:
       - web

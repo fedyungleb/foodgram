@@ -9,17 +9,19 @@ import Subscriptions from './subscriptions'
 import RecipeCreate from './recipe-create'
 import User from './user'
 import ChangePassword from './change-password'
+import Confirmation from './confirmation'
 
 export {
-  Main,
-  SignIn,
-  SingleCard,
-  SignUp,
-  RecipeEdit,
-  Cart,
-  Favorites,
-  Subscriptions,
-  RecipeCreate,
-  User,
-  ChangePassword
+    Main,
+    SignIn,
+    SingleCard,
+    SignUp,
+    RecipeEdit,
+    Cart,
+    Favorites,
+    Subscriptions,
+    RecipeCreate,
+    User,
+    ChangePassword,
+    Confirmation
 }

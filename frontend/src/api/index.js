@@ -398,6 +398,21 @@ class Api {
       }
     ).then(this.checkFileDownloadResponse)
   }
+  checkout () {
+  const token = localStorage.getItem('token')
+  return fetch(
+    `/api/recipes/checkout/`,
+    {
+      method: 'POST',
+      headers: {
+        ...this._headers,
+        'authorization': `Token ${token}`
+      },
+      body: JSON.stringify({})
+    }
+  ).then(this.checkResponse)
 }
+}
+
 
 export default new Api(process.env.API_URL || 'http://localhost', { 'content-type': 'application/json' })
