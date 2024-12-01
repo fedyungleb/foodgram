@@ -10,6 +10,7 @@ import RecipeCreate from './recipe-create'
 import User from './user'
 import ChangePassword from './change-password'
 import Confirmation from './confirmation'
+import AiSuggestion from "./ai-suggestion";
 
 export {
     Main,
@@ -23,5 +24,6 @@ export {
     RecipeCreate,
     User,
     ChangePassword,
-    Confirmation
+    Confirmation,
+    AiSuggestion
 }

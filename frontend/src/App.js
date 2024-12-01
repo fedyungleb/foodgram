@@ -20,8 +20,9 @@ import {
   User,
   ChangePassword,
   Confirmation,
+  AiSuggestion, // Import AI Suggestion page
 } from './pages';
-import { AuthContext, UserContext } from './contexts';
+import { AuthContext, UserContext, AiSuggestionContext} from './contexts';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(null);
@@ -31,6 +32,9 @@ function App() {
   const [menuToggled, setMenuToggled] = useState(false);
   const location = useLocation();
   const history = useHistory();
+
+  const [ingredients, setIngredients] = useState('');
+  const [suggestion, setSuggestion] = useState('');
 
   const registration = ({ email, password, username, first_name, last_name }) => {
     api
@@ -167,6 +171,9 @@ function App() {
   return (
     <AuthContext.Provider value={loggedIn}>
       <UserContext.Provider value={user}>
+        <AiSuggestionContext.Provider
+          value={{ ingredients, setIngredients, suggestion, setSuggestion }}
+        >
         <div
           className={cn('App', {
             [styles.appMenuToggled]: menuToggled,
@@ -240,12 +247,16 @@ function App() {
             <Route exact path="/signup">
               <SignUp onSignUp={registration} />
             </Route>
+            <Route exact path="/ai-suggestion">
+              <AiSuggestion />
+            </Route>
             <Route path="/">
               {loggedIn ? <Redirect to="/recipes" /> : <Redirect to="/signin" />}
             </Route>
           </Switch>
           <Footer />
         </div>
+          </AiSuggestionContext.Provider>
       </UserContext.Provider>
     </AuthContext.Provider>
   );

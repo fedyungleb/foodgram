@@ -398,20 +398,33 @@ class Api {
       }
     ).then(this.checkFileDownloadResponse)
   }
-  checkout () {
-  const token = localStorage.getItem('token')
-  return fetch(
-    `/api/recipes/checkout/`,
-    {
-      method: 'POST',
-      headers: {
-        ...this._headers,
-        'authorization': `Token ${token}`
-      },
-      body: JSON.stringify({})
+
+    checkout() {
+        const token = localStorage.getItem('token')
+        return fetch(
+            `/api/recipes/checkout/`,
+            {
+                method: 'POST',
+                headers: {
+                    ...this._headers,
+                    'authorization': `Token ${token}`
+                },
+                body: JSON.stringify({})
+            }
+        ).then(this.checkResponse)
     }
-  ).then(this.checkResponse)
-}
+
+    suggestRecipe(ingredients) {
+        const token = localStorage.getItem('token');
+        return fetch('/api/recipes/ai-suggestion/', {
+            method: 'POST',
+            headers: {
+                ...this._headers,
+                'authorization': `Token ${token}`,
+            },
+            body: JSON.stringify({ingredients}),
+        }).then(this.checkResponse);
+    }
 }
 
 
