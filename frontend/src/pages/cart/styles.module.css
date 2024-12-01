@@ -18,3 +18,44 @@
     gap: 8px;
   }
 }
+
+.dropdown {
+  margin-bottom: 20px;
+}
+
+.dropdown label {
+  margin-right: 10px;
+}
+
+.dropdown select {
+  padding: 5px;
+  font-size: 16px;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}

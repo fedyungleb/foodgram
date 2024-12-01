@@ -103,6 +103,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticated]
     )
     def checkout(self, request):
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"Checkout request received: {request.data}")
         shopping_cart_items = ShoppingCart.objects.filter(user=request.user)
         if not shopping_cart_items.exists():
             return Response({"error": "Shopping cart is empty"}, status=status.HTTP_400_BAD_REQUEST)
@@ -158,7 +161,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response({"success": True, "suggestion": suggestion})
         except KeyError:
             return Response({"error": "Unexpected response format from OpenAI"}, status=500)
-
 
 class IngredientsViewSet(viewsets.ModelViewSet):
     pagination_class = None
