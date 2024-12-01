@@ -1,7 +1,6 @@
 import os
 import environ
 
-
 env = environ.Env()
 environ.Env.read_env()
 
@@ -85,13 +84,11 @@ LOGGING = {
     },
 }
 
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'backend_media')
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
@@ -99,6 +96,20 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 DEFAULT_FROM_EMAIL = 'admin@yamdb.com'
 EXTERNAL_API_URL = 'http://grocery:8080/'
+
+AI_SUGGESTION_PROMPT_TEMPLATE = (
+    "Based on the following ingredients: {ingredients}, suggest a recipe that is well-known or widely recognized "
+    "and provide details with the following structure:\n"
+    "- Name of Recipe:\n"
+    "- Cooking Time:\n"
+    "- Type (Breakfast, Lunch, Dinner, Snack):\n"
+    "- Ingredients (with units of measurement):\n"
+    "- Step-by-step Cooking Instructions:\n"
+    "- Image Description (optional):\n"
+    "Make sure the recipe is realistic and matches popular culinary standards."
+)
+
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -130,7 +141,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 6,
     'SEARCH_PARAM': 'name',
 }
-
 
 AUTH_USER_MODEL = 'users.CustomUser'
 

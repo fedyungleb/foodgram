@@ -19,5 +19,9 @@ export default [
     title: 'Shopping list',
     href: '/cart',
     auth: true
-  }
+  }, {
+    title: 'AI Suggestion',
+    href: '/ai-suggestion',
+    auth: false
+  },
 ]

@@ -3,10 +3,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (
-    IsAuthenticated, IsAuthenticatedOrReadOnly
+    IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 )
 from rest_framework.response import Response
 
+from foodgram import settings
 from .filters import RecipeFilter
 from .models import FavoriteRecipe, Ingredient, Recipe, ShoppingCart, Tag
 from .permissions import AuthorOrReadOnly
@@ -15,6 +16,9 @@ from .serializers import (FavoritedSerializer, IngredientSerializer,
                           TagSerializer)
 from .utils import get_shopping_list
 from .external_api import ExternalGroceryService
+import openai
+from rest_framework.decorators import api_view
+
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -127,6 +131,33 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if "error" in response:
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(response, status=status.HTTP_200_OK)
+
+    @action(
+    detail=False,
+    methods=['POST'],
+    permission_classes=[AllowAny],
+    url_path='ai-suggestion'
+    )
+    def ai_suggest_recipe(self, request):
+        ingredients = request.data.get('ingredients', '')
+        if not ingredients:
+            return Response({"error": "Ingredients list is required"}, status=400)
+
+        prompt = settings.AI_SUGGESTION_PROMPT_TEMPLATE.format(ingredients=ingredients)
+        try:
+            openai.api_key = settings.OPENAI_API_KEY
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=200,
+            )
+        except Exception:
+            return Response({"error": "Error interacting with OpenAI API"}, status=500)
+        try:
+            suggestion = response["choices"][0]["message"]["content"]
+            return Response({"success": True, "suggestion": suggestion})
+        except KeyError:
+            return Response({"error": "Unexpected response format from OpenAI"}, status=500)
 
 
 class IngredientsViewSet(viewsets.ModelViewSet):
