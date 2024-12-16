@@ -11,6 +11,7 @@ import User from './user'
 import ChangePassword from './change-password'
 import Confirmation from './confirmation'
 import AiSuggestion from "./ai-suggestion";
+import LandingPage from "./landing-page";
 
 export {
     Main,
@@ -25,5 +26,6 @@ export {
     User,
     ChangePassword,
     Confirmation,
-    AiSuggestion
+    AiSuggestion,
+    LandingPage,
 }

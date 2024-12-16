@@ -21,7 +21,8 @@ import {
   User,
   ChangePassword,
   Confirmation,
-  AiSuggestion, // Import AI Suggestion page
+  AiSuggestion,
+  LandingPage,
 } from './pages';
 import { AuthContext, UserContext, AiSuggestionContext } from './contexts';
 
@@ -267,6 +268,9 @@ function App() {
               </Route>
               <Route exact path="/ai-suggestion">
                 <AiSuggestion />
+              </Route>
+              <Route exact path={"/landing"}>
+                <LandingPage/>
               </Route>
               <Route path="/">
                 {loggedIn ? <Redirect to="/recipes" /> : <Redirect to="/signin" />}

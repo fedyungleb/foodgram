@@ -29,7 +29,7 @@ const AccountMenu = ({ onSignOut }) => {
     <a
       className={styles.menuLink}
       onClick={onSignOut}
-    >Exit</a>
+    >Log out</a>
   </div>
 }
 
